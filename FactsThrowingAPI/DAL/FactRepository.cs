@@ -4,7 +4,7 @@ using Microsoft.EntityFrameworkCore;
 using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Security.Cryptography.X509Certificates;
+
 using System.Threading.Tasks;
 
 namespace FactsThrowingAPI.DAL
@@ -99,16 +99,37 @@ namespace FactsThrowingAPI.DAL
             else return null;
         }
 
+        public void AssociateTags(List<Guid> tagsId, Guid factId)
+        {
+            var fact = _Context.Facts.Single(c => c.Id == factId);
+
+            foreach(Guid id in tagsId) {
+                var tag = _Context.Tags.Single(c => c.Id == id);
+
+                _Context.Facts_Tags.Add(new Fact_TagDAO()
+                {
+                    Fact= fact,
+                    Tag = tag
+                }
+                );
+                    }
+
+            _Context.SaveChanges();
+
+        }
 
         public List<Tag> RelatedTags(Guid factId)
         {
-            var taglist = _Context.Facts_Tags.Where(c => c.IdFact == factId).Select(c => c.Tag).AsEnumerable();
+            var associatedFactsTags = _Context.Facts.Where(c => c.Id == factId).SelectMany(c => c.Facts_Tags);
+            var taglist = associatedFactsTags.Select(c => c.Tag).ToList();
+
             var result = new List<Tag>();
+
             foreach (var tag in taglist)
             {
                 result.Add(new Tag(tag.Id, tag.Name));
             }
-
+            
             return result;
         }
 

@@ -18,6 +18,7 @@ namespace FactsThrowingAPI
 {
     public class Startup
     {
+  
         public Startup(IConfiguration configuration)
         {
             Configuration = configuration;
@@ -29,7 +30,9 @@ namespace FactsThrowingAPI
         public void ConfigureServices(IServiceCollection services)
         {
          
+
             services.AddControllers();
+            
             services.AddDbContext<FactsContext>(options => options.UseSqlServer(Configuration.GetConnectionString("FactDB")));
             services.AddSwaggerGen(c =>
             c.SwaggerDoc("v1", new Microsoft.OpenApi.Models.OpenApiInfo() { Title = "Facts Throwing API", Version = "v1" })
@@ -48,6 +51,10 @@ namespace FactsThrowingAPI
                 app.UseDeveloperExceptionPage();
             }
 
+            app.UseCors(builder => builder
+                .AllowAnyOrigin()
+                .AllowAnyHeader()
+                .AllowAnyMethod());
             app.UseSwagger();
 
             app.UseSwaggerUI(c => {

@@ -80,7 +80,7 @@ namespace FactsThrowingAPI.Controllers
         [HttpPost]
         public ActionResult<Fact> Create([FromBody] FactDTO dto)
         {
-
+            if (dto.Title == null || dto.Content == null) return ValidationProblem();
             var fact = new Fact(dto.Title, dto.Content);
             _repository.Add(fact);
 
@@ -92,7 +92,7 @@ namespace FactsThrowingAPI.Controllers
         /// - Update an existing fact considering the new information given in the request's body
         /// * Met à jour un fait existant avec les informations données dans le body de la requête
         /// </summary>
-        [HttpPatch]
+        [HttpPatch("{id}")]
         public ActionResult<Fact> Update([FromRoute] Guid id, [FromBody] FactDTO data)
         {
             var updatedfact = _repository.Update(id, new Fact(id, data.Title, data.Content));
@@ -125,12 +125,21 @@ namespace FactsThrowingAPI.Controllers
         /// * Retourne une liste contenant tous les tags associés à un fait donné (ID)
         /// </summary>
         [HttpGet]
-        [Route("{id}/tags")]
-        public ActionResult<IEnumerable<Fact>> getTagsFromFact([FromRoute] Guid factId)
+        [Route("{factId}/tags")]
+        public ActionResult<IEnumerable<Tag>> GetTagsFromFact([FromRoute] Guid factId)
         {
             var associatedTags = _repository.RelatedTags(factId);
 
             return Ok(associatedTags);
+        }
+
+        [HttpPatch]
+        [Route("{factId}/tags")]
+        public ActionResult AssociateTagsToFact([FromRoute] Guid factId, [FromBody] List<Guid> tagsId)
+        {
+            _repository.AssociateTags(tagsId, factId);
+
+            return Ok();
         }
     }
 }
