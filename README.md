@@ -1,16 +1,16 @@
-# Facts Throwing API
+# Facts Thrower API
 > A french version is available in the project. Search for readme.fr.md
 ## Purpose
-Facts Throwing API is a little REST API i made on my free time. It it designed, as its name involve, to deliver basic facts for global knowledge purpose.
+Facts Throwing API is an API designed, as its name involve, to deliver basic facts for global knowledge purpose.
 
-Only french is available for now but i might offer a translation later on.
+Only french is available for now but i might offer a translation later on, why not
 
 ### Tech
 
 * | [.NET CORE] | - C# Framework
 * | [Entity Framework Core] | - Awesome Data Access Layer framework (coupled with Fluent API)
 * | [Microsoft SQL Server] | - Database service (coupled with EntityFrameworkCore Sql Server library)
-* | [Swagger] | - Pratictal tool for API documentation purpose, readability and tests
+* | [Swagger] | - usefull tool for API documentation means, readability and tests
 
 
 ### Installation
